@@ -69,7 +69,7 @@ class Tiflo_system():
         # (С переводом на русский / можно попробовать с union_markup вместо without_voice_markup)
         # Тип воборки кадров для описания сцены:                                        'cpu_version', 'light', 'hard'
         descriptions = {}
-        #descriptions = self.video2desc.video2description(path_video, without_voice_markup,procces_type='cpu_version')  # Выводов столько же, сколько и разбитых диапазонов для аудиосопровождения
+        descriptions = self.video2desc.video2description(path_video, without_voice_markup,procces_type='cpu_version')  # Выводов столько же, сколько и разбитых диапазонов для аудиосопровождения
         if not os.path.exists('descriptions.json'):
             with open('descriptions.json', 'w') as file:
                 json.dump(descriptions, file)
@@ -81,20 +81,20 @@ class Tiflo_system():
         # Поиск лиц внутри сцен, для описания диалогов
         #classes, scenes_with_people = self.face_rec.video2face_recognition(path_video,scenes_markup)  # Выводов столько же, сколько и сцен найдено
 
-        with open('classes.json','w') as file:
-            json.dump(classes, file)
-        with open('scenes_with_people.json','w') as file:
-            json.dump(scenes_with_people, file)
+        #with open('classes.json','w') as file:
+        #    json.dump(classes, file)
+        #with open('scenes_with_people.json','w') as file:
+        #    json.dump(scenes_with_people, file)
 
-        print(classes)
-        print(scenes_with_people)
+        #print(classes)
+        #print(scenes_with_people)
         print(f'Время выполнения всех вычислений: {round(time.time() - master_start_time,2)} секунд')
         # Генерация озвучки text2speech
         video = VideoFileClip(path_video)
         fps = int(video.fps)
         self.speaker.text2speech(descriptions, markup=without_voice_markup, fps=fps)
         return
-        self.speaker.text2speech(classes, fps=fps)
+        #self.speaker.text2speech(classes, fps=fps)
 
     def database_request(self):
         """
