@@ -9,7 +9,7 @@ from Utils import Utils
 import torch
 from moviepy.editor import VideoFileClip
 from pydub import AudioSegment
-from scenedetect import detect, ContentDetector, AdaptiveDetector, ThresholdDetector, split_video_ffmpeg, open_video, SceneManager
+from scenedetect import AdaptiveDetector, open_video, SceneManager
 #pip install PySoundFile
 #pip install SoundFile
 
