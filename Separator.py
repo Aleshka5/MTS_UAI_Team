@@ -1,3 +1,9 @@
+import torch
+from IPython.display import Audio
+import audiosegment
+import wave
+import pyaudio
+
 class Separator():
     def __init__(self,threshold,type_of_detector,path_cutter):
         # Voice divide
