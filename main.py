@@ -79,15 +79,15 @@ class Tiflo_system():
         print(descriptions)
 
         # Поиск лиц внутри сцен, для описания диалогов
-        #classes, scenes_with_people = self.face_rec.video2face_recognition(path_video,scenes_markup)  # Выводов столько же, сколько и сцен найдено
+        classes, scenes_with_people = self.face_rec.video2face_recognition(path_video,scenes_markup)  # Выводов столько же, сколько и сцен найдено
 
-        #with open('classes.json','w') as file:
-        #    json.dump(classes, file)
-        #with open('scenes_with_people.json','w') as file:
-        #    json.dump(scenes_with_people, file)
+        with open('classes.json','w') as file:
+           json.dump(classes, file)
+        with open('scenes_with_people.json','w') as file:
+           json.dump(scenes_with_people, file)
 
-        #print(classes)
-        #print(scenes_with_people)
+        print(classes)
+        print(scenes_with_people)
         print(f'Время выполнения всех вычислений: {round(time.time() - master_start_time,2)} секунд')
         # Генерация озвучки text2speech
         video = VideoFileClip(path_video)
