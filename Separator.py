@@ -1,8 +1,15 @@
+import pprint
+import json
+import time
+
+from Cutter import Cutter
+from Video import Video
+from Utils import Utils
+
 import torch
-from IPython.display import Audio
-import audiosegment
-import wave
-import pyaudio
+from moviepy.editor import VideoFileClip
+from pydub import AudioSegment
+from scenedetect import AdaptiveDetector, open_video, SceneManager
 
 class Separator():
     def __init__(self,threshold,type_of_detector,path_cutter):
