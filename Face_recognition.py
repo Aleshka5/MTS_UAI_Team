@@ -360,15 +360,15 @@ class Face_recognition():
                 frameRes = cv2.resize(frame.copy(), (0, 0), None, size_reduction_factor,
                                       size_reduction_factor)  # подготовка кадра
 
-                # frameResBRGB = cv2.cvtColor(frameRes.copy(), cv2.COLOR_BGR2RGB)
-                frameResBRGB = frameRes[:, :, ::-1]
+                frameResBRGB = cv2.cvtColor(frameRes.copy(), cv2.COLOR_BGR2RGB)
+                #frameResBRGB = frameRes[:, :, ::-1]
                 # frameResBRGB =   frameRes
                 # подготовка кадра
                 # viewImage(frameResBRGB, waiK=0)
                 #        viewImage(frame, waiK=0)
 
-                facesLocations = recognitionFacesCV(frameResBRGB)  # захват кадра
-                encodingFaces = face_recognition.face_encodings(frameResBRGB, facesLocations)  # кодирование лиц
+                facesLocations = face_recognition.face_locations(frameResBRGB, number_of_times_to_upsample= 2, model='cnn')# Пишут что большая, работает быстрей на GPU
+                encodingFaces = face_recognition.face_encodings(frameResBRGB, facesLocations)
                 # landmark = face_recognition.face_landmarks(frameResBRGB)    # Поиск черт лица
 
                 # =============================================================================
