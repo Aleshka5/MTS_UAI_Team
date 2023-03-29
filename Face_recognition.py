@@ -633,18 +633,14 @@ class Face_recognition():
             print('найденны имена:', faces_names, len(faces_names))
             print('найденны encod', type(encodeListKnown), len(encodeListKnown), encodeListKnown[0].shape)
 
-        df = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
+        class_frames_dict, unique_names = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
         # try:
         #     df = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
         # except:
-        #     df = load_df(csv_path)
-
-        scenes_with_people = {}
-        for cls_id in pd.unique(df['name']):
-            scenes_with_people[cls_id] = list(df[df['name']==cls_id]['frame'])
-        print(scenes_with_people)
+        #     df = load_df(csv_path)        
+        print(class_frames_dict)
         # ====================================================================
-        return scenes_with_people
+        return class_frames_dict
 
     def labels_classifier(self,scenes_with_people,video_path):
         """
