@@ -633,8 +633,11 @@ class Face_recognition():
 
             print('найденны имена:', faces_names, len(faces_names))
             print('найденны encod', type(encodeListKnown), len(encodeListKnown), encodeListKnown[0].shape)
-              
-        start_index = len(pathVideo) - pathVideo[::-1].find('/')
+        
+        if pathVideo[::-1].find('/') != -1:
+            start_index = len(pathVideo) - pathVideo[::-1].find('/')
+        else:
+            start_index = 0
         video_name = pathVideo[start_index:-4]
         
         if os.path.exists(video_name+'_face_rec.json'):
