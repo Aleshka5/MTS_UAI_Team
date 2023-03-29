@@ -355,6 +355,9 @@ class Face_recognition():
                     if blok == 0:
                         streams = False
                     continue
+                if num % 2 == 0:
+                    num += 1
+                    continue
                 # print(num, 'np.max(frame)', np.max(frame), '  np.average(frame)', round(np.average(frame)), frame.shape)
                 frshape = frame.shape
 
@@ -461,7 +464,7 @@ class Face_recognition():
                     pass
                 num += 1  # счетчик кадров
                 if num <= 2:
-                    print(f'Примерное время поиска героев: {round((time.time()-start_part_time) * frames_count,2)} секунд')                   
+                    print(f'Примерное время поиска героев: {round((time.time()-start_part_time) * (frames_count/2),2)} секунд')                   
             # print(df)
             df_copy = copy.deepcopy(df)
             # df.to_csv(path,index=False)
