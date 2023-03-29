@@ -668,6 +668,12 @@ class Face_recognition():
         """
         # Логика функции
         # ====================================================================
+        if video_path[::-1].find('/') != -1:
+            start_index = len(video_path) - video_path[::-1].find('/')
+        else:
+            start_index = 0
+        video_name = video_path[start_index:-4]
+        
         classes = {}
         # Функция вывода примеров изображени обнаруженных классов (лиц)
         cap = cv2.VideoCapture(video_path)
@@ -712,6 +718,9 @@ class Face_recognition():
                     if ((np.where(np.array(frames) > start_id)[0].shape[0] > 0) and (np.where(np.array(frames) < end_id)[0].shape[0] > 0)):
                         list_classes.append(class_)
             full_face_rec_markup['face_rec_scenes'].append({str(scene_id):list_classes})
+        
+        with open(f'face_rec_markup_{video_name}.json','w') as file:
+            json.dump(full_face_rec_markup,file)
             
         print(f'Список классов для удаления < 5 кадров')
         print(classes_for_delete)
