@@ -10,6 +10,7 @@ from PIL import Image, ImageDraw
 from openCVmet import *
 import uuid
 import torchvision
+import json
 
 class Face_recognition():
     def __init__(self):
@@ -643,6 +644,8 @@ class Face_recognition():
         #     df = load_df(csv_path)        
         print(class_frames_dict)
         # ====================================================================
+        with open('face_rec_dict.json','w') as file:
+            jsno.dump(class_frames_dict,file)
         return class_frames_dict
 
     def labels_classifier(self,scenes_with_people,video_path):
