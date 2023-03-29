@@ -72,7 +72,7 @@ class Tiflo_system():
         # Генерация описаний к видео-фрагментам
         # (С переводом на русский / можно попробовать с union_markup вместо without_voice_markup)
         # Тип воборки кадров для описания сцены:                                        'cpu_version', 'light', 'hard'
-        if not ((os.path.exists('descriptions.json')) and (self.take_previous_markup)):
+        if not ((os.path.exists(f'descriptions_{video_name}.json')) and (self.take_previous_markup)):
             descriptions = self.video2desc.video2description(path_video,
                                                              without_voice_markup,
                                                              procces_type='light')  # Выводов столько же, сколько и разбитых диапазонов для аудиосопровождения
