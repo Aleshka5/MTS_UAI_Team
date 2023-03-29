@@ -38,4 +38,4 @@
 Князев Александр: <a href="https://github.com/Squderini">Squderini</a><br>
 Шахлин Виталий: <a href="https://github.com/vshakhlin">vshakhlin</a><br>
 Глебов Павел: <a href="https://github.com/Pavel-hb">Pavel-hb</a><br>
-Мартинович Степан: <a href="https://github.com/Stedjey">Stedjey</a><br>
+Мартынович Степан: <a href="https://github.com/Stedjey">Stedjey</a><br>
