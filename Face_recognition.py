@@ -641,9 +641,10 @@ class Face_recognition():
              with open(video_name+'.json','r') as file:
                 class_frames_dict = json.load(file)            
         else:
-            class_frames_dict, unique_names = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
-            with open(video_name+'.json','w') as file:
+            class_frames_dict, unique_names = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)          
+            with open(video_name+'.json','w') as file:                
                 json.dump(class_frames_dict,file)
+                print(f'Сохранено в {video_name+'.json'}')
         print(class_frames_dict)
         # ====================================================================       
         return class_frames_dict
@@ -673,16 +674,17 @@ class Face_recognition():
 
         classes_frames_count = {}
         classes_for_delete = []
-
+        raws = 1
+        count = 5
         for class_id, frames_list in scenes_with_people.items():
             print(class_id, frames_list)
-            if len(frames_list) < 5:
+            if len(frames_list) < count:
                 print(f"Число кадров у класса {class_id} меньше 5")
                 classes_for_delete.append(class_id)
                 continue
             classes_frames_count[class_id] = len(frames_list)
-            frames_to_show = np.random.choice(frames_list, 5, replace=False)
-            fig, axs = plt.subplots(1, 5, figsize=(30, 20))
+            frames_to_show = np.random.choice(frames_list, count * raws, replace=False)
+            fig, axs = plt.subplots(raws, count, figsize=(30, 20))
             for i, frame_num in enumerate(frames_to_show):
                 cap.set(cv2.CAP_PROP_POS_FRAMES, frame_num)
                 ret, frame = cap.read()
@@ -693,8 +695,9 @@ class Face_recognition():
                 axs[i].imshow(frame)
                 axs[i].set_title(f"{class_id} ({frame_num})")
                 axs[i].axis('off')
-            plt.show()            
-        for class_id, frames_list in scenes_with_people.items():
+            plt.show()   
+            for i in range(2):
+                print('',end='')
             classes[class_id] = input('Введите назвение класса: (0 - если класс не валидный)')
         cap.release()
         print(f'Список классов для удаления < 5 кадров')
