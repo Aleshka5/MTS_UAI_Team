@@ -35,30 +35,33 @@ class Tiflo_system():
                          'face_classes':
                          'faces_on_frames':}
         """
+        start_index = len(path_video) - path_video[::-1].find('/')
+        video_name = path_video[start_index:-4]
+        
         master_start_time = time.time()
         # Разметка на логические элементы, которые нужно озвучивать
-        if not ((os.path.exists('voice_markup.json')) and (self.take_previous_markup)):
+        if not ((os.path.exists(f'voice_markup_{video_name}.json')) and (self.take_previous_markup)):
             without_voice_markup = self.separator.voice_divide(path_video, min_time_scene=3)
-            with open('voice_markup.json', 'w') as file:
+            with open(f'voice_markup_{video_name}.json', 'w') as file:
                 json.dump(without_voice_markup, file)
 
         else:
             print('Загружены предыдущие разметки видео')
-            with open('voice_markup.json', 'r') as file:
+            with open(f'voice_markup_{video_name}.json', 'r') as file:
                 without_voice_markup = json.load(file)
 
-        if not ((os.path.exists('scenes_markup.json')) and (self.take_previous_markup)):
+        if not ((os.path.exists(f'scenes_markup_{video_name}.json')) and (self.take_previous_markup)):
             if self.type_of_scene_detector:
                 scenes_markup = self.separator.scene_divide_v1(path_video, min_time_scene=0)
             else:
                 scenes_markup = self.separator.scene_divide_v2(path_video, min_time_scene=0)
 
-            with open('scenes_markup.json', 'w') as file:
+            with open(f'scenes_markup{video_name}.json', 'w') as file:
                 json.dump(scenes_markup, file)
 
         else:
             print('Загружены предыдущие разметки видео')
-            with open('scenes_markup.json', 'r') as file:
+            with open(f'scenes_markup_{video_name}.json', 'r') as file:
                 scenes_markup = json.load(file)
 
         print(without_voice_markup)
@@ -73,20 +76,20 @@ class Tiflo_system():
             descriptions = self.video2desc.video2description(path_video,
                                                              without_voice_markup,
                                                              procces_type='light')  # Выводов столько же, сколько и разбитых диапазонов для аудиосопровождения
-            with open('descriptions.json', 'w') as file:
+            with open(f'descriptions_{video_name}.json', 'w') as file:
                 json.dump(descriptions, file)
         else:
             print('Загружены предыдущие разметки видео')
-            with open('descriptions.json', 'r') as file:
+            with open(f'descriptions_{video_name}.json', 'r') as file:
                 descriptions = json.load(file)
         print(descriptions)
 
         # Поиск лиц внутри сцен, для описания диалогов
         classes, scenes_with_people = self.face_rec.video2face_recognition(path_video,scenes_markup)  # Выводов столько же, сколько и сцен найдено
 
-        with open('classes.json','w') as file:
+        with open(f'classes_{video_name}.json','w') as file:
             json.dump(classes, file)
-        with open('scenes_with_people.json','w') as file:
+        with open(f'scenes_with_people_{video_name}.json','w') as file:
             json.dump(scenes_with_people, file)
 
         print(classes)
