@@ -35,8 +35,11 @@ class Tiflo_system():
                          'face_classes':
                          'faces_on_frames':}
         """
-        start_index = len(path_video) - path_video[::-1].find('/')
-        video_name = path_video[start_index:-4]
+        if pathVideo[::-1].find('/') != -1:
+            start_index = len(pathVideo) - pathVideo[::-1].find('/')
+        else:
+            start_index = 0
+        video_name = pathVideo[start_index:-4]
         
         master_start_time = time.time()
         # Разметка на логические элементы, которые нужно озвучивать
