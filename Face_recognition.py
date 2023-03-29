@@ -709,7 +709,7 @@ class Face_recognition():
             list_classes = []
             for class_, frames in classes_frames_count.items:
                 if classes[class_] != '0' and classes[class_] != 'delete' and classes[class_] != 'empty' and classes[class_] != 'none':
-                    if ((np.where(np.array(frames) > start_id)[0].shape > 0) and (np.where(np.array(frames) < end_id)[0].shape > 0):
+                    if ((np.where(np.array(frames) > start_id)[0].shape > 0) and (np.where(np.array(frames) < end_id)[0].shape > 0)):
                         list_classes.append(class_)
             full_face_rec_markup['face_rec_scenes'].append({str(scene_id):list_classes})
             
