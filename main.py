@@ -59,7 +59,7 @@ class Tiflo_system():
             else:
                 scenes_markup = self.separator.scene_divide_v2(path_video, min_time_scene=0)
 
-            with open(f'scenes_markup{video_name}.json', 'w') as file:
+            with open(f'scenes_markup_{video_name}.json', 'w') as file:
                 json.dump(scenes_markup, file)
 
         else:
