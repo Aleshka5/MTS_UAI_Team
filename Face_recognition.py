@@ -322,7 +322,7 @@ class Face_recognition():
             start_time = time.time()
             numFace = len(faces_names)
 
-            df = pd.DataFrame({'frame': [0], 'name': [0], 'xyhw': [0], 'encode': [0]})
+            df = pd.DataFrame({'frame': [0], 'name': ['0'], 'xyhw': [0], 'encode': [0]})
             cap = cv2.VideoCapture(video_path, cv2.CAP_FFMPEG)  # загруз видео
             frames_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
             # cv.CAP_DSHOW DirectShow (via videoInput)
@@ -433,7 +433,7 @@ class Face_recognition():
                         dfN['encode'] = dfN['encode'].astype(object)
                         dfN['xyhw'] = dfN['xyhw'].astype(object)
                         dfN['encode'] = [np.array(encodingFace), ]
-                        dfN['name'] = int(name)
+                        dfN['name'] = str(name)
                         dfN['frame'] = num
                         dfN['xyhw'] = [faseLoc]
                         # print(dfN)
