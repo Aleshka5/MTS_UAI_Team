@@ -50,7 +50,7 @@ class Speaker():
                     print(f'Коэффициент темпа речи: {speed_coef}')
                     with open(file_name+str(id)+'.wav', 'wb') as f:
                         f.write(Audio(audio, rate=48000).data)
-                    np_audio = audiosegment.from_file(file_name+str(id)+'.wav').resample(sample_rate_Hz=48000*speed_coef, sample_width=2,
+                    np_audio = audiosegment.from_file(file_name+str(id)+'.wav').resample(sample_rate_Hz=44000*speed_coef, sample_width=2,
                                                                              channels=1).to_numpy_array()
                     print(np_audio.shape)
                     print('Старт записи аудио сопровождения')

@@ -154,13 +154,12 @@ class Separator():
         # ====================================================================
         dict_markup = {}
         self.path_video = path_video
-        self.type_of_detector = type_of_detector
         video = open_video(self.path_video)
 
         fps = int(video.frame_rate)
 
         scene_manager = SceneManager()
-        scene_manager.add_detector(type_of_detector(self.threshold))
+        scene_manager.add_detector(self.type_of_detector(self.threshold))
 
         # детектириуем все сцены в видео от начала к концу
         scene_manager.detect_scenes(video)
@@ -236,20 +235,15 @@ class Separator():
         """
         Объединение двух разметок в одну более подробную, учитывающую как речь, так и смену сцен.
         (Опциональная функция. Пока не является необходимой)
-
                                                  кадр начала сцены          кадр конца сцены
         :param scenes_markup: {'scenes_markup':[{'start_frame_scene': <int>, 'end_frame_scene': <int> },
                                                 {'start_frame_scene': <int>, 'end_frame_scene': <int> }, ... ]}
-
                            кадр начала промежутка без человеческой речи     кадр конца промежутка без человеческой речи
         :param without_voice_markup: {'voice_markup':[{'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> },
                                                       {'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> }, ... ]}
-
         :return:
-
         dict_markup: {'voice_markup':[{'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> },
                                       {'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> }, ... ]}
-
         Пример:
         # - кадры, на которых нет речи людей (подходящие)
         \ - start_frame
@@ -263,7 +257,42 @@ class Separator():
         dict_markup = {}
         # Логика функции
         # ====================================================================
+        final = []
 
+        # переведем словари в списки
+        # по участкам без голоса
+        l_without_voice_markup = []
+        for i in range(len(without_voice_markup['voice_markup'])):
+            l_without_voice_markup.append([without_voice_markup['voice_markup'][i]['start_frame'],
+                                           without_voice_markup['voice_markup'][i]['end_frame']])
+        # по сценам
+        l_scenes_markup = []
+        for i in range(len(scenes_markup['scenes_markup'])):
+            l_scenes_markup.append([scenes_markup['scenes_markup'][i]['start_frame_scene'],
+                                    scenes_markup['scenes_markup'][i]['end_frame_without_scene']])
+
+        # ищем пересечения
+
+        i = 0
+        j = 0
+
+        while i < len(l_without_voice_markup) and j < len(l_scenes_markup):
+            interval1 = l_without_voice_markup[i]
+            interval2 = l_scenes_markup[j]
+
+            if interval1[1] <= interval2[0]:
+                i += 1
+            elif interval2[1] <= interval1[0]:
+                j += 1
+            else:
+                start = max(interval1[0], interval2[0])
+                end = min(interval1[1], interval2[1])
+                final.append([start, end])
+                if interval1[1] > interval2[1]:
+                    j += 1
+                else:
+                    i += 1
+        dict_markup['voice_markup_final'] = final
         # ====================================================================
         return dict_markup
 

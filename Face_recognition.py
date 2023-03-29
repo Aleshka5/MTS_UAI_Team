@@ -11,7 +11,6 @@ from openCVmet import *
 import uuid
 import torchvision
 
-
 class Face_recognition():
     def __init__(self):
         pass
@@ -85,7 +84,7 @@ class Face_recognition():
             res = (res * 0.5) + 0.5
             tempfile = "/tmp/" + str(uuid.uuid4()) + ".jpg"
             torchvision.utils.save_image(res, tempfile)
-            client.file(file_uri).putFile(tempfile)
+            #client.file(file_uri).putFile(tempfile)
 
         def saveImage(file, path=pathFoto, finename='newfoto.jpg'):
             ''' Сохранение картинки по умолчанию относительный путь к папке источнику path=data/фото  + вложенная папка paper = 'newfoto'
@@ -360,15 +359,16 @@ class Face_recognition():
                 frameRes = cv2.resize(frame.copy(), (0, 0), None, size_reduction_factor,
                                       size_reduction_factor)  # подготовка кадра
 
-                # frameResBRGB = cv2.cvtColor(frameRes.copy(), cv2.COLOR_BGR2RGB)
-                frameResBRGB = frameRes[:, :, ::-1]
+                frameResBRGB = cv2.cvtColor(frameRes.copy(), cv2.COLOR_BGR2RGB)
+                # frameResBRGB = frameRes[:, :, ::-1]
                 # frameResBRGB =   frameRes
                 # подготовка кадра
                 # viewImage(frameResBRGB, waiK=0)
                 #        viewImage(frame, waiK=0)
 
-                facesLocations = recognitionFacesCV(frameResBRGB)  # захват кадра
-                encodingFaces = face_recognition.face_encodings(frameResBRGB, facesLocations)  # кодирование лиц
+                facesLocations = face_recognition.face_locations(frameResBRGB, number_of_times_to_upsample=2,
+                                                                 model='cnn')  # Пишут что большая, работает быстрей на GPU
+                encodingFaces = face_recognition.face_encodings(frameResBRGB, facesLocations)
                 # landmark = face_recognition.face_landmarks(frameResBRGB)    # Поиск черт лица
 
                 # =============================================================================
@@ -633,10 +633,11 @@ class Face_recognition():
             print('найденны имена:', faces_names, len(faces_names))
             print('найденны encod', type(encodeListKnown), len(encodeListKnown), encodeListKnown[0].shape)
 
-        try:
-            df = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
-        except:
-            df = load_df(csv_path)
+        df = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
+        # try:
+        #     df = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
+        # except:
+        #     df = load_df(csv_path)
 
         scenes_with_people = {}
         for cls_id in pd.unique(df['name']):
