@@ -463,7 +463,7 @@ class Face_recognition():
                     # viewImage(frame, waiK=800)
                     pass
                 num += 1  # счетчик кадров
-                if num <= 2:
+                if num <= 3:
                     print(f'Примерное время поиска героев: {round((time.time()-start_part_time) * (frames_count/2),2)} секунд')                   
             # print(df)
             df_copy = copy.deepcopy(df)
