@@ -355,9 +355,6 @@ class Face_recognition():
                     if blok == 0:
                         streams = False
                     continue
-                if num % 2 == 0:
-                    num += 1
-                    continue
                 # print(num, 'np.max(frame)', np.max(frame), '  np.average(frame)', round(np.average(frame)), frame.shape)
                 frshape = frame.shape
 
