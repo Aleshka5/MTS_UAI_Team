@@ -32,11 +32,14 @@ class Speaker():
             speaker = self.speaker
         if type(full_text) == dict:
             for id, text in full_text.items():
-                audio = self.model.apply_tts(text=text,
-                                        speaker=speaker,
-                                        sample_rate=self.gen_rate,
-                                        put_accent=self.put_accent,
-                                        put_yo=self.put_yo)
+                if text != '0' and text != 'delete' and text != 'empty' and text != 'none':
+                    audio = self.model.apply_tts(text=text,
+                                            speaker=speaker,
+                                            sample_rate=self.gen_rate,
+                                            put_accent=self.put_accent,
+                                            put_yo=self.put_yo)
+                 else:
+                    continue
 
                 if markup:
                     gen_length = int(audio.shape[0]/self.gen_rate)
