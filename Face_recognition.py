@@ -340,9 +340,9 @@ class Face_recognition():
             num = 0
             blok = 10
 
-            name = 'noName'
+            name = 'noName'            
             while streams:  # num < 50: #streams:
-
+                start_part_time = time.time()
                 ret, fram = cap.read()  # захват кадра
                 frame = copy.copy(fram)
                 # frame = cv2.copyMakeBorder(fram,0,0,0,0,cv2.BORDER_REPLICATE)
@@ -368,7 +368,7 @@ class Face_recognition():
 
                 facesLocations = face_recognition.face_locations(frameResBRGB, number_of_times_to_upsample=2,
                                                                  model='cnn')  # Пишут что большая, работает быстрей на GPU
-                encodingFaces = face_recognition.face_encodings(frameResBRGB, facesLocations)
+                encodingFaces = face_recognition.face_encodings(frameResBRGB, facesLocations)                
                 # landmark = face_recognition.face_landmarks(frameResBRGB)    # Поиск черт лица
 
                 # =============================================================================
@@ -457,6 +457,8 @@ class Face_recognition():
                     # viewImage(frame, waiK=800)
                     pass
                 num += 1  # счетчик кадров
+                if num <= 2:
+                    print(f'Примерное время расчётов{round(time.time()-start_part_time,2)} секунд')                   
             # print(df)
             df_copy = copy.deepcopy(df)
             # df.to_csv(path,index=False)
