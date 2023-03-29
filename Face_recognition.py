@@ -32,7 +32,8 @@ class Face_recognition():
         """
         scenes_with_people = self.my_face_recognition(video_path)
         print(video_path[:-4]+'_out'+video_path[-4:])
-        classes = self.labels_classifier(scenes_with_people,video_path)
+        out_video_path = video_path[:-4]+'_out'+video_path[-4:]
+        classes = self.labels_classifier(scenes_with_people,out_video_path)
 
         return classes, scenes_with_people
 
@@ -601,11 +602,7 @@ class Face_recognition():
                 else:
                     break
 
-            return faces_names
-
-        def load_df(path):
-            df = pd.read_csv(path)
-            return df
+            return faces_names        
 
         ''' Пооход по видео и сохранение найденных фитч в пандас потом вывод и запрос имен
         rename: - меню переименивание загруженных классов
@@ -636,16 +633,19 @@ class Face_recognition():
 
             print('найденны имена:', faces_names, len(faces_names))
             print('найденны encod', type(encodeListKnown), len(encodeListKnown), encodeListKnown[0].shape)
-
-        class_frames_dict, unique_names = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
-        # try:
-        #     df = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
-        # except:
-        #     df = load_df(csv_path)        
+              
+        start_index = len(pathVideo) - pathVideo[::-1].find('/')
+        video_name = pathVideo[start_index:-4]
+        
+        if os.path.exists(video_name+'.json'):
+             with open(video_name+'.json','r') as file:
+                class_frames_dict = json.load(file)            
+        else:
+            class_frames_dict, unique_names = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)
+            with open(video_name+'.json','w') as file:
+                json.dump(class_frames_dict,file)
         print(class_frames_dict)
-        # ====================================================================
-        with open('face_rec_dict.json','w') as file:
-            jsno.dump(class_frames_dict,file)
+        # ====================================================================       
         return class_frames_dict
 
     def labels_classifier(self,scenes_with_people,video_path):
@@ -693,8 +693,8 @@ class Face_recognition():
                 axs[i].imshow(frame)
                 axs[i].set_title(f"{class_id} ({frame_num})")
                 axs[i].axis('off')
-            plt.show()
-            print('\n\n')
+            plt.show()            
+        for class_id, frames_list in scenes_with_people.items():
             classes[class_id] = input('Введите назвение класса: (0 - если класс не валидный)')
         cap.release()
         print(f'Список классов для удаления < 5 кадров')
