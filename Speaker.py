@@ -38,7 +38,7 @@ class Speaker():
                                             sample_rate=self.gen_rate,
                                             put_accent=self.put_accent,
                                             put_yo=self.put_yo)
-                 else:
+                else:
                     continue
 
                 if markup:
