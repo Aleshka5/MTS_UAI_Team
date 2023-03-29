@@ -1,15 +1,24 @@
 import pprint
 import json
 import time
+import numpy as np
+from shutil import rmtree
 
 from Cutter import Cutter
 from Video import Video
 from Utils import Utils
 
+import imageio
+import imageio.plugins.ffmpeg as ffmpeg
+import moviepy
+import moviepy.editor
+
 import torch
 from moviepy.editor import VideoFileClip
 from pydub import AudioSegment
 from scenedetect import AdaptiveDetector, open_video, SceneManager
+from moviepy.editor import concatenate_audioclips, AudioFileClip, VideoFileClip
+from moviepy.video import io
 #pip install PySoundFile
 #pip install SoundFile
 
@@ -257,6 +266,8 @@ class Separator():
         dict_markup = {}
         # Логика функции
         # ====================================================================
+        # Логика функции
+        # ====================================================================
         final = []
 
         # переведем словари в списки
@@ -268,8 +279,8 @@ class Separator():
         # по сценам
         l_scenes_markup = []
         for i in range(len(scenes_markup['scenes_markup'])):
-            l_scenes_markup.append([scenes_markup['scenes_markup'][i]['start_frame_scene'],
-                                    scenes_markup['scenes_markup'][i]['end_frame_without_scene']])
+            l_scenes_markup.append([scenes_markup['scenes_markup'][i]['start_frame'],
+                                    scenes_markup['scenes_markup'][i]['end_frame']])
 
         # ищем пересечения
 
@@ -287,12 +298,12 @@ class Separator():
             else:
                 start = max(interval1[0], interval2[0])
                 end = min(interval1[1], interval2[1])
-                final.append([start, end])
+                final.append([{'start_frame':start, 'end_frame':end}])
                 if interval1[1] > interval2[1]:
                     j += 1
                 else:
                     i += 1
-        dict_markup['voice_markup_final'] = final
+        dict_markup['voice_markup'] = final
         # ====================================================================
         return dict_markup
 
