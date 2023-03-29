@@ -637,14 +637,14 @@ class Face_recognition():
         start_index = len(pathVideo) - pathVideo[::-1].find('/')
         video_name = pathVideo[start_index:-4]
         
-        if os.path.exists(video_name+'.json'):
-             with open(video_name+'.json','r') as file:
+        if os.path.exists(video_name+'_face_rec.json'):
+             with open(video_name+'_face_rec.json','r') as file:
                 class_frames_dict = json.load(file)            
         else:
             class_frames_dict, unique_names = findFacesOnVideo(pathVideo, encodeListKnown=encodeListKnown, faces_names=faces_names)          
-            with open(video_name+'.json','w') as file:                
+            with open(video_name+'_face_rec.json','w') as file:                
                 json.dump(class_frames_dict,file)
-                print(f'Сохранено в {video_name}.json')
+                print(f'Сохранено в {video_name}_face_rec.json')
         print(class_frames_dict)
         # ====================================================================       
         return class_frames_dict
