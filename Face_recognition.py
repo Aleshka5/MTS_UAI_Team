@@ -411,7 +411,7 @@ class Face_recognition():
                             #        [True]      [0.43499996]
                             # print(f'кадр {num} Расстояние matches: ', matches, 'faceDist:', faceDist)
 
-                            if faceDist[minFaseIdInd] < 0.58:  # по моему бред просто выбор ближнего
+                            if faceDist[minFaseIdInd] < 0.65:  # по моему бред просто выбор ближнего
                                 name = faces_names[minFaseIdInd]
                                 # viewImage(frame[y1:y2, x1:x2,...], waiK=0)
                             else:  # если новая фитча
@@ -699,17 +699,17 @@ class Face_recognition():
                 axs[i].set_title(f"{class_id} ({frame_num})")
                 axs[i].axis('off')
             plt.show()   
-            time.sleep(2)
+            time.sleep(2)            
             classes[class_id] = input('Введите назвение класса: (0 - если класс не валидный)')
         cap.release()
         
         full_face_rec_markup = {'face_rec_scenes':[]}
         for scene_id in range(len(scenes_markup['scenes_markup'])):
-            start_id, end_id = scenes_markup[scene_id]['start_frame'], scenes_markup[scene_id]['end_frame']
+            start_id, end_id = scenes_markup['scenes_markup'][scene_id]['start_frame'], scenes_markup['scenes_markup'][scene_id]['end_frame']
             list_classes = []
-            for class_, frames in classes_frames_count.items:
+            for class_, frames in classes_frames_count.items():
                 if classes[class_] != '0' and classes[class_] != 'delete' and classes[class_] != 'empty' and classes[class_] != 'none':
-                    if ((np.where(np.array(frames) > start_id)[0].shape > 0) and (np.where(np.array(frames) < end_id)[0].shape > 0)):
+                    if ((np.where(np.array(frames) > start_id)[0].shape[0] > 0) and (np.where(np.array(frames) < end_id)[0].shape[0] > 0)):
                         list_classes.append(class_)
             full_face_rec_markup['face_rec_scenes'].append({str(scene_id):list_classes})
             
