@@ -33,7 +33,7 @@ class Face_recognition():
         scenes_with_people = self.my_face_recognition(video_path)
         print(video_path[:-4]+'_out'+video_path[-4:])
         out_video_path = video_path[:-4]+'_out'+video_path[-4:]
-        classes = self.labels_classifier(scenes_with_people,out_video_path)
+        classes = self.labels_classifier(scenes_with_people,out_video_path,scenes_markup)
 
         return classes, scenes_with_people
 
@@ -652,7 +652,7 @@ class Face_recognition():
         # ====================================================================       
         return class_frames_dict
 
-    def labels_classifier(self,scenes_with_people,video_path):
+    def labels_classifier(self,scenes_with_people,video_path,scenes_markup):
         """
         Присваивание названий для уникальных классов лиц.
 
