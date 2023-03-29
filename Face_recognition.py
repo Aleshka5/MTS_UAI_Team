@@ -699,10 +699,20 @@ class Face_recognition():
                 axs[i].set_title(f"{class_id} ({frame_num})")
                 axs[i].axis('off')
             plt.show()   
-            for i in range(2):
-                print('',end='')
+            time.sleep(2)
             classes[class_id] = input('Введите назвение класса: (0 - если класс не валидный)')
         cap.release()
+        
+        full_face_rec_markup = {'face_rec_scenes':[]}
+        for scene_id in range(len(scenes_markup['scenes_markup'])):
+            start_id, end_id = scenes_markup[scene_id]['start_frame'], scenes_markup[scene_id]['end_frame']
+            list_classes = []
+            for class_, frames in classes_frames_count.items:
+                if classes[class_] != '0' and classes[class_] != 'delete' and classes[class_] != 'empty' and classes[class_] != 'none':
+                    if ((np.where(np.array(frames) > start_id)[0].shape > 0) and (np.where(np.array(frames) < end_id)[0].shape > 0):
+                        list_classes.append(class_)
+            full_face_rec_markup['face_rec_scenes'].append({str(scene_id):list_classes})
+            
         print(f'Список классов для удаления < 5 кадров')
         print(classes_for_delete)
         print(f'Словарь с классами и количеством кадров где обнаружены')
