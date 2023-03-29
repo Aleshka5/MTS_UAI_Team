@@ -66,7 +66,7 @@ class Speaker():
                         p.terminate()
                 else:
                     with open('class_'+id+'.wav', 'wb') as f:
-                        f.write(Audio(np_audio, rate=44000).data)
+                        f.write(Audio(audio, rate=44000).data)
 if __name__ == '__main__':
     test = Speaker(language = 'ru')
     test.text2speech('днем на улице сначала мужчина бьёт другого мужчину, потом проводит рукой перед собой')
