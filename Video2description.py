@@ -167,7 +167,7 @@ class Video2description():
         summarization = []
         for item in merged_list:
             try:
-                summary = self.summarizer(item)
+                summary = self.summarizer(item, max_length=60)
                 summarization.append(summary)
             except IndexError:
                 # Разбиваем строку на две части
@@ -175,8 +175,8 @@ class Video2description():
                 first_half = item[:half]
                 second_half = item[half:]
                 # Запускаем обработку каждой половины
-                first_summary = self.summarizer(first_half)
-                second_summary = self.summarizer(second_half)
+                first_summary = self.summarizer(first_half, max_length=40)
+                second_summary = self.summarizer(second_half, max_length=40)
                 # Склеиваем результаты
                 summary = first_summary + second_summary
                 summarization.append(summary)

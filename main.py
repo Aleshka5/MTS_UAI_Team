@@ -11,10 +11,11 @@ from scenedetect import AdaptiveDetector
 
 
 class Tiflo_system():
-    def __init__(self, sep_threshold=27.0, type_of_scene_detector=None, speaker_language='ru'):
+    def __init__(self, sep_threshold=27.0, type_of_scene_detector=None, take_previous_markup=False, speaker_language='ru'):
         self.separator = Separator(threshold=sep_threshold,
                                    type_of_detector=type_of_scene_detector,
                                    path_cutter='model_film_cut_v9_93')
+        self.take_previous_markup = take_previous_markup
         self.type_of_scene_detector = type_of_scene_detector
         self.face_rec = Face_recognition()
         self.video2desc = Video2description()
@@ -36,7 +37,7 @@ class Tiflo_system():
         """
         master_start_time = time.time()
         # Разметка на логические элементы, которые нужно озвучивать
-        if not os.path.exists('voice_markup.json'):
+        if not ((os.path.exists('voice_markup.json')) and (self.take_previous_markup)):
             without_voice_markup = self.separator.voice_divide(path_video, min_time_scene=3)
             with open('voice_markup.json', 'w') as file:
                 json.dump(without_voice_markup, file)
@@ -46,7 +47,7 @@ class Tiflo_system():
             with open('voice_markup.json', 'r') as file:
                 without_voice_markup = json.load(file)
 
-        if not os.path.exists('scenes_markup.json'):
+        if not ((os.path.exists('scenes_markup.json')) and (self.take_previous_markup)):
             if self.type_of_scene_detector:
                 scenes_markup = self.separator.scene_divide_v1(path_video, min_time_scene=0)
             else:
@@ -68,12 +69,14 @@ class Tiflo_system():
         # Генерация описаний к видео-фрагментам
         # (С переводом на русский / можно попробовать с union_markup вместо without_voice_markup)
         # Тип воборки кадров для описания сцены:                                        'cpu_version', 'light', 'hard'
-        descriptions = {}
-        descriptions = self.video2desc.video2description(path_video, without_voice_markup,procces_type='cpu_version')  # Выводов столько же, сколько и разбитых диапазонов для аудиосопровождения
-        if not os.path.exists('descriptions.json'):
+        if not ((os.path.exists('descriptions.json')) and (self.take_previous_markup)):
+            descriptions = self.video2desc.video2description(path_video,
+                                                             without_voice_markup,
+                                                             procces_type='light')  # Выводов столько же, сколько и разбитых диапазонов для аудиосопровождения
             with open('descriptions.json', 'w') as file:
                 json.dump(descriptions, file)
         else:
+            print('Загружены предыдущие разметки видео')
             with open('descriptions.json', 'r') as file:
                 descriptions = json.load(file)
         print(descriptions)
@@ -82,9 +85,9 @@ class Tiflo_system():
         classes, scenes_with_people = self.face_rec.video2face_recognition(path_video,scenes_markup)  # Выводов столько же, сколько и сцен найдено
 
         with open('classes.json','w') as file:
-           json.dump(classes, file)
+            json.dump(classes, file)
         with open('scenes_with_people.json','w') as file:
-           json.dump(scenes_with_people, file)
+            json.dump(scenes_with_people, file)
 
         print(classes)
         print(scenes_with_people)
@@ -107,9 +110,9 @@ class Tiflo_system():
 
 if __name__ == '__main__':
     video_path = 'Острые_козырьки.mp4'
-    threshold = 27.0
+    threshold = 5.0
 
     # Передать в систему, как тип разбиения видео на сцены
     type_of_detector = AdaptiveDetector
-    test = Tiflo_system(sep_threshold=threshold)
+    test = Tiflo_system(sep_threshold=threshold, take_previous_markup=True)
     test.processing(path_video=video_path)

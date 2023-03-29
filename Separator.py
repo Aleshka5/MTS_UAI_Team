@@ -10,6 +10,8 @@ import torch
 from moviepy.editor import VideoFileClip
 from pydub import AudioSegment
 from scenedetect import AdaptiveDetector, open_video, SceneManager
+#pip install PySoundFile
+#pip install SoundFile
 
 class Separator():
     def __init__(self,threshold,type_of_detector,path_cutter):
@@ -152,23 +154,25 @@ class Separator():
         # ====================================================================
         dict_markup = {}
         self.path_video = path_video
-        self.type_of_detector = type_of_detector
-
         video = open_video(self.path_video)
+
+        fps = int(video.frame_rate)
+
         scene_manager = SceneManager()
-        scene_manager.add_detector(
-            type_of_detector(self.threshold))
-        
-        #детектириуем все сцены в видео от начала к концу
+        scene_manager.add_detector(self.type_of_detector(self.threshold))
+
+        # детектириуем все сцены в видео от начала к концу
         scene_manager.detect_scenes(video)
         l_detect = scene_manager.get_scene_list()
-        #get_scene_list - возвращает список сцен с метками начала и конца
-        #в секундах и с указанием номера кадра
-        #вспомогательный список, в который будем собирать кадры начало/конец сцен
+        # get_scene_list - возвращает список сцен с метками начала и конца
+        # в секундах и с указанием номера кадра
+        # вспомогательный список, в который будем собирать кадры начало/конец сцен
         l_scene = []
         for i in range(len(l_detect)):
-          l_scene.append({'start_frame_scene': l_detect[i][0].get_frames(), 'end_frame_without_scene': l_detect[i][1].get_frames()})
+            if (l_detect[i][1].get_seconds() - l_detect[i][0].get_seconds()) > min_time_scene:
+                l_scene.append({'start_frame': int(l_detect[i][0].get_seconds()*fps), 'end_frame': int(l_detect[i][1].get_seconds()*fps)})
         dict_markup['scenes_markup'] = l_scene
+        # ====================================================================
         return dict_markup
 
     def scene_divide_v2(self,path_video, min_time_scene=0, batch_size=1500, parts_count=-1):
@@ -231,20 +235,15 @@ class Separator():
         """
         Объединение двух разметок в одну более подробную, учитывающую как речь, так и смену сцен.
         (Опциональная функция. Пока не является необходимой)
-
                                                  кадр начала сцены          кадр конца сцены
         :param scenes_markup: {'scenes_markup':[{'start_frame_scene': <int>, 'end_frame_scene': <int> },
                                                 {'start_frame_scene': <int>, 'end_frame_scene': <int> }, ... ]}
-
                            кадр начала промежутка без человеческой речи     кадр конца промежутка без человеческой речи
         :param without_voice_markup: {'voice_markup':[{'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> },
                                                       {'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> }, ... ]}
-
         :return:
-
         dict_markup: {'voice_markup':[{'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> },
                                       {'start_frame_without_speech': <int>, 'end_frame_without_speech': <int> }, ... ]}
-
         Пример:
         # - кадры, на которых нет речи людей (подходящие)
         \ - start_frame
@@ -259,18 +258,20 @@ class Separator():
         # Логика функции
         # ====================================================================
         final = []
-        
-        #переведем словари в списки
-        #по участкам без голоса
+
+        # переведем словари в списки
+        # по участкам без голоса
         l_without_voice_markup = []
         for i in range(len(without_voice_markup['voice_markup'])):
-          l_without_voice_markup.append([without_voice_markup['voice_markup'][i]['start_frame'], without_voice_markup['voice_markup'][i]['end_frame']])
-        #по сценам
+            l_without_voice_markup.append([without_voice_markup['voice_markup'][i]['start_frame'],
+                                           without_voice_markup['voice_markup'][i]['end_frame']])
+        # по сценам
         l_scenes_markup = []
         for i in range(len(scenes_markup['scenes_markup'])):
-          l_scenes_markup.append([scenes_markup['scenes_markup'][i]['start_frame_scene'], scenes_markup['scenes_markup'][i]['end_frame_without_scene']])
-        
-        #ищем пересечения
+            l_scenes_markup.append([scenes_markup['scenes_markup'][i]['start_frame_scene'],
+                                    scenes_markup['scenes_markup'][i]['end_frame_without_scene']])
+
+        # ищем пересечения
 
         i = 0
         j = 0
@@ -278,7 +279,7 @@ class Separator():
         while i < len(l_without_voice_markup) and j < len(l_scenes_markup):
             interval1 = l_without_voice_markup[i]
             interval2 = l_scenes_markup[j]
-            
+
             if interval1[1] <= interval2[0]:
                 i += 1
             elif interval2[1] <= interval1[0]:
@@ -291,14 +292,13 @@ class Separator():
                     j += 1
                 else:
                     i += 1
-        dict_markup['voice_markup_final'] = final            
+        dict_markup['voice_markup_final'] = final
         # ====================================================================
         return dict_markup
 
 
 if __name__ == '__main__':
-    video_path = '/content/joker.mp4'
-    path_video = '/content/joker.mp4' 
+    video_path = 'Острые_козырьки.mp4'
 
     threshold = 27.0
     type_of_detector = AdaptiveDetector
@@ -306,3 +306,7 @@ if __name__ == '__main__':
     test_divide = Separator(threshold=threshold,
                             type_of_detector=type_of_detector,
                             path_cutter='model_film_cut_v9_93')
+
+    print(test_divide.scene_divide_v1(video_path,min_time_scene=3))
+    print(test_divide.scene_divide_v2(video_path,min_time_scene=3))
+    #print(test_divide.voice_divide(video_path,min_time_scene=3))
