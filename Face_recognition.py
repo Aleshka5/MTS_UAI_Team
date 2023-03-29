@@ -430,7 +430,7 @@ class Face_recognition():
                         dfN['encode'] = dfN['encode'].astype(object)
                         dfN['xyhw'] = dfN['xyhw'].astype(object)
                         dfN['encode'] = [np.array(encodingFace), ]
-                        dfN['name'] = str(name)
+                        dfN['name'] = int(name)
                         dfN['frame'] = num
                         dfN['xyhw'] = [faseLoc]
                         # print(dfN)
