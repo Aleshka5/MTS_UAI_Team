@@ -322,6 +322,7 @@ class Face_recognition():
 
             df = pd.DataFrame({'frame': [0], 'name': [0], 'xyhw': [0], 'encode': [0]})
             cap = cv2.VideoCapture(video_path, cv2.CAP_FFMPEG)  # загруз видео
+            frames_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
             # cv.CAP_DSHOW DirectShow (via videoInput)
             # cv.CAP_FFMPEG Open and record video file or stream using the FFMPEG library.
             # CAP_IMAGES  cv.CAP_IMAGES OpenCV Image Sequence (e.g. img_%02d.jpg)
@@ -458,7 +459,7 @@ class Face_recognition():
                     pass
                 num += 1  # счетчик кадров
                 if num <= 2:
-                    print(f'Примерное время расчётов{round(time.time()-start_part_time,2)} секунд')                   
+                    print(f'Примерное время расчётов{round((time.time()-start_part_time) * frames_count,2)} секунд')                   
             # print(df)
             df_copy = copy.deepcopy(df)
             # df.to_csv(path,index=False)
