@@ -411,7 +411,7 @@ class Face_recognition():
                             #        [True]      [0.43499996]
                             # print(f'кадр {num} Расстояние matches: ', matches, 'faceDist:', faceDist)
 
-                            if faceDist[minFaseIdInd] < 0.65:  # по моему бред просто выбор ближнего
+                            if faceDist[minFaseIdInd] < 0.60:  # по моему бред просто выбор ближнего
                                 name = faces_names[minFaseIdInd]
                                 # viewImage(frame[y1:y2, x1:x2,...], waiK=0)
                             else:  # если новая фитча
