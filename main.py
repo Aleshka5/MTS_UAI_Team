@@ -101,9 +101,8 @@ class Tiflo_system():
         # Генерация озвучки text2speech
         video = VideoFileClip(path_video)
         fps = int(video.fps)
-        self.speaker.text2speech(descriptions, markup=without_voice_markup, fps=fps)
-        return
-        #self.speaker.text2speech(classes, fps=fps)
+        self.speaker.text2speech(descriptions, markup=without_voice_markup, fps=fps)      
+        self.speaker.text2speech(classes, fps=fps)
 
     def database_request(self):
         """
