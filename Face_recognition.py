@@ -691,6 +691,7 @@ class Face_recognition():
                 axs[i].set_title(f"{class_id} ({frame_num})")
                 axs[i].axis('off')
             plt.show()
+            print('\n\n')
             classes[class_id] = input('Введите назвение класса: (0 - если класс не валидный)')
         cap.release()
         print(f'Список классов для удаления < 5 кадров')
