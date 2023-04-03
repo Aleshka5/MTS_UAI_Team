@@ -47,4 +47,5 @@
 Шахлин Виталий: <a href="https://github.com/vshakhlin">vshakhlin</a><br>
 Глебов Павел: <a href="https://github.com/Pavel-hb">Pavel-hb</a><br>
 Мартынович Степан: <a href="https://github.com/Stedjey">Stedjey</a><br>
+
 ![team](https://user-images.githubusercontent.com/100163713/229600856-9db9442d-517c-4431-bbe0-ebba5a2ea1eb.png)
