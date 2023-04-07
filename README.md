@@ -36,7 +36,19 @@
 
 
 # Second Step
-Более подробно вы можете рассмтреть наш сайт в нашей презентации: <a href="">Презентация сайта</a><br>
+Более подробно вы можете рассмтреть наш сайт в репозитории: <a href="">[1]</a><br>
+
+## Просмотр видео для людей с ограничениями по зрению
+Искользуемые технологии
+
+## Frontend
+- <a href="https://github.com/vuejs">Vue</a>
+- <a href="https://www.typescriptlang.org">TypeScript</a>
+- <a href="https://github.com/videojs/video.js">Video.js</a> для воспроизведеие видео
+## Backend
+- <a href="https://www.python.org/">Python</a>
+- <a href="https://github.com/pallets/flask">Flask</a>
+- <a href="https://github.com/sqlalchemy/sqlalchemy">SQLAlchemy</a>
 
 # Quick Start
 Для проверки работоспособности нашей системы для генерации тифлокомментариев вы можете выполнить простой код в ноутбуке <a href="https://colab.research.google.com/drive/12g97sgxS4suIZHFURT2iG9hGSduUnvzW#scrollTo=WozCs7AZuEUW">[3]</a>
