@@ -54,6 +54,7 @@
 
 
 # Our Team
+ - Филенков Алексей: <a href="https://github.com/Aleshka5">Aleshka5</a><br>
  - Князев Александр: <a href="https://github.com/Squderini">Squderini</a><br>
 - Шахлин Виталий: <a href="https://github.com/vshakhlin">vshakhlin</a><br>
 - Глебов Павел: <a href="https://github.com/Pavel-hb">Pavel-hb</a><br>
